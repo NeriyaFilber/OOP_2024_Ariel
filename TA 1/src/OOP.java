@@ -167,7 +167,7 @@ interface EnrollmentValidator {
 class CapacityValidator implements EnrollmentValidator {
     @Override
     public boolean validateEnrollment(Student student, Course course) {
-        return course.hasAvailableSeats();
+        return false;
     }
 }
 

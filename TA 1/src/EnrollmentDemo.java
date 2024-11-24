@@ -7,6 +7,7 @@ public class EnrollmentDemo {
 
         System.out.println("\n=== FP Approach Demo ===");
         demonstrateFP();
+
     }
 
     private static void demonstrateOOP() {
