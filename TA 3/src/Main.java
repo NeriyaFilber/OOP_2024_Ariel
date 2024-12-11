@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,18 +18,9 @@ public class Main {
 
         System.out.println("Before sorting: " + personList);
 
-        // Sorting by age using AgeComparator (outer class)
-        Person.AgeComparator outerAgeComparator = new Person.AgeComparator();
-        personList.sort(outerAgeComparator);
-        System.out.println("After sorting by age using AgeComparator (outer class): " + personList);
-
-        // Sorting by age using AgeComparator (inner class)
-        Person.AgeComparator innerAgeComparator = new Person.AgeComparator();
-        personList.sort(innerAgeComparator);
-        System.out.println("After sorting by age using AgeComparator (inner class): " + personList);
-
-        // Sorting by Comparator field (ageComparator)
-        personList.sort(Person.ageComparator);
+        personList.sort(Comparator.comparingInt(Person::getAge).thenComparingInt(Person::getId));
+        Collections.sort(personList);
+       // Sorting by Comparator field (ageComparator)
         System.out.println("After sorting by age using ageComparator field: " + personList);
 
         // Sorting by name

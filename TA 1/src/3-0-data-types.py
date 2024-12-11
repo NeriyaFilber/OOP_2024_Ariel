@@ -33,7 +33,7 @@ print(thislist)
 y = ("apple", "banana", "cherry")  # assign
 
 # ______________________________________________#
-x = range(6)  # range(start, stop, step)
+x = range(0, 6, 2)  # range(start, stop, step)
 # ______________________________________________#
 # Mapping Type: 	dict
 a = {"name": "John", "age": 36}  # dict: unordered, changeable and indexed. No duplicate members.
@@ -60,4 +60,7 @@ x = b"Hello"
 x = bytearray(5)
 x = memoryview(bytes(5))
 
+a = 2
+b = 5
+print("g" if a < b else "c")
 
