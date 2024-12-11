@@ -1,5 +1,6 @@
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import java.util.Stack;
 
 // TreeNode class to represent each node in the binary tree
 class TreeNode {
@@ -111,7 +112,10 @@ public class IteratorExample {
 
         // Traverse the tree using the iterator
         System.out.println("\nElements traversed using Iterator:");
+
         TreeIterator iterator = tree.createIterator();
+//        tree.insert(1);
+//        tree.printTree();
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
