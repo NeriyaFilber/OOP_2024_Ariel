@@ -8,10 +8,10 @@ class Address {
     }
 
 // copy constructor
-//    public Address(Address other) {
-//        this.city = other.getCity();
-//        this.street = other.getStreet();
-//    }
+    public Address(Address other) {
+        this.city = other.getCity();
+        this.street = other.getStreet();
+    }
 
     public String getCity() {
         return city;

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,11 +32,12 @@ public class Main {
         peopleList.add(dad1);
         peopleList.add(dad2);
 
+        System.out.println("person: " +person1);
+
         // Print information using for-each loop
         for (Person person : peopleList) {
-            System.out.println(person);
+                System.out.println(person);
         }
-
 
         // overloading
         // Example 1: Overloaded methods with different parameter types

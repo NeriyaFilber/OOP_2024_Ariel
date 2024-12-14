@@ -2,7 +2,10 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-
+    Example a = new Example(6);
+    Example b = new Example(6);
+    Example c = new Example();
+    Example d = new Example();
 
         //  static keyword
         Student john = new Student("John");
@@ -10,6 +13,7 @@ public class Main {
 
         john.addGrade(90);
         sarah.addGrade(95);
+
 
         john.addGrade(80);
         sarah.addGrade(88);
@@ -21,11 +25,11 @@ public class Main {
         System.out.println('\n');
 
 
-        // encapsulation
         AccessModifiers obj = new AccessModifiers();
 
         // Can only access public field and method
-        System.out.println(obj.publicField);
+        System.out.println(obj.publicField);        // encapsulation
+
         obj.publicMethod();
 
         // Can access protected field and method
@@ -35,7 +39,6 @@ public class Main {
         // Can access default field and method
         System.out.println(obj.defaultField);
         obj.defaultMethod();
-
 
 
         System.out.println('\n');
@@ -83,5 +86,10 @@ public class Main {
         System.out.println("original: " + Arrays.toString(original));
         System.out.println("shallow: " + Arrays.toString(ShallowCopy));
         System.out.println("deep: "+ Arrays.toString(deepCopy));
+
+
+
+
+
     }
 }
