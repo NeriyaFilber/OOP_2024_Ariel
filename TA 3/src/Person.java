@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 
-class Person {
+class Person implements Comparable<Person> {
     private int id;
     private String name;
     private int age;
@@ -40,16 +41,11 @@ class Person {
     // Comparator for sorting by id
     public static Comparator<Person> idComparator = Comparator.comparingInt(Person::getId);
 
-
-    /**
-     * Implementing Comparators by inner class
-     */
-    static class AgeComparator implements Comparator<Person> {
-        @Override
-        public int compare(Person person1, Person person2) {
-            return Integer.compare(person1.getAge(), person2.getAge());
-        }
+    @Override
+    public int compareTo(Person o) {
+        return Integer.compare(this.age, o.age);
     }
+
 
     // Override toString method
     @Override

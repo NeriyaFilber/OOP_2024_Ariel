@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.concurrent.Callable;
+
 
 /**
  * This program demonstrates the functions of the Iterator class in Java.
@@ -7,7 +9,9 @@ import java.util.*;
  * Date: 04/09/2023
  * */
 public class IteratorExample {
-
+    static void print(String e) {
+        System.out.println("Next element: " + e);
+    }
     public static void main(String[] args) {
 
         // Create an ArrayList of integers and a LinkedList of strings //
@@ -24,15 +28,20 @@ public class IteratorExample {
             System.out.println("Next element: " + nextElement);
         }
 
+
+        for (Integer i: intArr) {
+            System.out.println("Next element: " + i);
+        }
+
+
         System.out.println();
 
         // Use forEachRemaining to go through the LinkedList and perform actions on each element
         // with the help of a lambda function or a reference to the function
-        stringIter.forEachRemaining((element) -> {
-            System.out.println("Next element: " + element);
-        });
+        stringIter.forEachRemaining((element) -> System.out.println("Next element: " + element));
         // Another option is to give a reference to the function
-        /* stringIter.forEachRemaining(System.out::println); */
+
+        stringIter.forEachRemaining(IteratorExample::print);
 
         System.out.println();
 

@@ -20,7 +20,7 @@ class Person {
         // deep or shallow
         if (deepCopy) {
             this.address = new Address(original.address.getCity(), original.address.getStreet());
-            // this.address = new Address(original.address); // if there is copy constructor
+//             this.address = new Address(original.address); // if there is copy constructor
         }
         else {
             this.address = original.address; // Shallow copy
