@@ -9,7 +9,7 @@ public class AgifyApiExample {
     public static void main(String[] args) {
         // List of 20 names to predict ages
         List<String> names = Arrays.asList(
-                "Alice", "Bob", "Charlie", "David", "Eva",
+                "Alice", "alice", "Charlie", "David", "Eva",
                 "Frank", "Grace", "Hannah", "Ivan", "Julia",
                 "Kevin", "Laura", "Mike", "Nina", "Oscar",
                 "Paul", "Quincy", "Rachel", "Steve", "Tina"

@@ -9,7 +9,7 @@ class God {
     }
 
     // Method to get the single instance of the class
-    public static God getInstance() {
+    public static God createGod() {
         if (instance == null) {
             instance = new God();
         }
@@ -30,10 +30,10 @@ class God {
 
     public static void main(String[] args) {
         // Using the Singleton pattern to get the same instance
-        God godInstance1 = God.getInstance();
+        God godInstance1 = God.createGod();
         godInstance1.createWorld();
 
-        God godInstance2 = God.getInstance();
+        God godInstance2 = God.createGod();
         godInstance2.destroyWorld();
 
         // Both instances should be the same
