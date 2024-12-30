@@ -10,10 +10,12 @@ class Singleton:
 # Example usage:
 singleton_instance1 = Singleton()
 singleton_instance2 = Singleton()
+singleton_instance3 = Singleton()
 
 print(singleton_instance1 is singleton_instance2)  # Output will be: True
+print(singleton_instance1 is singleton_instance3)  # Output will be: True
 
-# # also works but problematic!
+# also works but problematic!
 # # Java style
 # class Singleton:
 #     _instance = None
@@ -34,5 +36,8 @@ print(singleton_instance1 is singleton_instance2)  # Output will be: True
 # # Example usage:
 # singleton_instance1 = Singleton.get_instance()
 # singleton_instance2 = Singleton.get_instance()
+# singleton_instance3 = Singleton()  # Raise an error
+#
 #
 # print(singleton_instance1 is singleton_instance2)  # Output will be: True
+# print(singleton_instance1 is singleton_instance3)

@@ -1,13 +1,43 @@
-from typing import Dict
+from typing import Dict, List, Optional
+from dataclasses import dataclass
+import sys
+
+"""
+Flyweight Pattern Implementation for Rich Text Editor
+
+Purpose:
+This code demonstrates the Flyweight pattern to optimize memory usage in a rich text editor 
+by sharing character format objects instead of creating new ones for each character.
+
+Benefits:
+1. Memory Efficiency: Instead of storing format data for each character, identical formats 
+  are shared across multiple characters, significantly reducing memory usage.
+
+2. Performance: Fewer object creations and less memory allocation leads to better 
+  performance, especially for large documents.
 
 
-# Flyweight (Intrinsic state)
+Implementation Details:
+- CharacterFormat: Flyweight object storing intrinsic formatting state (font, size, etc.)
+- FormatFactory: Manages format object pool and ensures reuse
+- FormattedCharacter: Context class combining character (extrinsic) with format (intrinsic)
+- RichTextDocument: Main document class demonstrating practical usage
+
+Memory savings are demonstrated in the output statistics showing:
+- Total characters vs unique format objects created
+- Estimated memory saved by reusing format objects
+"""
+
+
+@dataclass
 class CharacterFormat:
-    def __init__(self, font: str, size: int, bold: bool, italic: bool):
-        self.font = font
-        self.size = size
-        self.bold = bold
-        self.italic = italic
+    """Flyweight object containing intrinsic state"""
+    font: str
+    size: int
+    bold: bool
+    italic: bool
+    color: str
+    background: str
 
     def __str__(self) -> str:
         style = []
@@ -16,88 +46,133 @@ class CharacterFormat:
         if self.italic:
             style.append("italic")
         style_str = ", ".join(style) if style else "normal"
-        return f"Format[font={self.font}, size={self.size}, style={style_str}]"
+        return f"Format[font={self.font}, size={self.size}, style={style_str}, color={self.color}, bg={self.background}]"
 
 
-# Flyweight Factory
 class FormatFactory:
+    """Flyweight factory that manages format objects"""
     _formats: Dict[str, CharacterFormat] = {}
 
     @classmethod
-    def get_format(cls, font: str, size: int, bold: bool = False, italic: bool = False) -> CharacterFormat:
-        """Get or create a character format"""
-        # Create a key for the format combination
-        key = f"{font}-{size}-{bold}-{italic}"
+    def get_format(
+            cls,
+            font: str,
+            size: int,
+            bold: bool = False,
+            italic: bool = False,
+            color: str = "black",
+            background: str = "white"
+    ) -> CharacterFormat:
+        key = f"{font}-{size}-{bold}-{italic}-{color}-{background}"
 
-        # Return existing format if it exists
         if key not in cls._formats:
-            cls._formats[key] = CharacterFormat(font, size, bold, italic)
+            cls._formats[key] = CharacterFormat(font, size, bold, italic, color, background)
 
         return cls._formats[key]
 
     @classmethod
     def format_count(cls) -> int:
-        """Return the number of format objects created"""
         return len(cls._formats)
 
+    @classmethod
+    def memory_usage(cls) -> int:
+        """Estimate memory usage of format objects in bytes"""
+        # Rough estimation of memory used by each format object
+        return len(cls._formats) * sys.getsizeof(CharacterFormat("", 0, False, False, "", ""))
 
-# Context class that contains extrinsic state
+
 class FormattedCharacter:
+    """Context class containing extrinsic state"""
+
     def __init__(self, char: str, format_: CharacterFormat):
-        self.char = char  # Extrinsic state
-        self.format_ = format_  # Reference to flyweight
+        self.char = char
+        self.format_ = format_
 
     def render(self) -> str:
         return f"'{self.char}' with {self.format_}"
 
 
-# Text editor that uses the flyweight pattern
-class TextEditor:
-    def __init__(self):
-        self.characters: list[FormattedCharacter] = []
+@dataclass
+class Paragraph:
+    """Container for formatted text with paragraph-level formatting"""
+    alignment: str = "left"  # left, center, right, justify
+    line_spacing: float = 1.0
+    content: List[FormattedCharacter] = None
 
-    def add_character(self, char: str, font: str, size: int, bold: bool = False, italic: bool = False):
-        """Add a character with specified formatting"""
-        format_ = FormatFactory.get_format(font, size, bold, italic)
-        self.characters.append(FormattedCharacter(char, format_))
+    def __post_init__(self):
+        self.content = self.content or []
 
-    def add_text(self, text: str, font: str, size: int, bold: bool = False, italic: bool = False):
-        """Add multiple characters with the same formatting"""
+    def add_text(self, text: str, format_: CharacterFormat):
         for char in text:
-            self.add_character(char, font, size, bold, italic)
+            self.content.append(FormattedCharacter(char, format_))
+
+
+class RichTextDocument:
+    """Rich text document containing multiple paragraphs"""
+
+    def __init__(self):
+        self.paragraphs: List[Paragraph] = []
+        self.current_paragraph: Optional[Paragraph] = None
+
+    def new_paragraph(self, alignment: str = "left", line_spacing: float = 1.0):
+        """Start a new paragraph with specified formatting"""
+        self.current_paragraph = Paragraph(alignment=alignment, line_spacing=line_spacing)
+        self.paragraphs.append(self.current_paragraph)
+
+    def add_text(self, text: str, font: str, size: int, bold: bool = False,
+                 italic: bool = False, color: str = "black", background: str = "white"):
+        """Add text to the current paragraph with specified formatting"""
+        if not self.current_paragraph:
+            self.new_paragraph()
+
+        format_ = FormatFactory.get_format(font, size, bold, italic, color, background)
+        self.current_paragraph.add_text(text, format_)
 
     def display(self):
-        """Display the formatted text"""
-        for char in self.characters:
-            print(char.render())
+        """Display the formatted document"""
+        for i, para in enumerate(self.paragraphs, 1):
+            print(f"\nParagraph {i} ({para.alignment}, {para.line_spacing}x spacing):")
+            print("-" * 50)
+            for char in para.content:
+                print(char.render())
 
 
 def main():
-    editor = TextEditor()
+    # Create a sample document with multiple paragraphs and formats
+    doc = RichTextDocument()
 
-    # Add some text with different formatting
-    print("Adding formatted text to editor...")
-    editor.add_text("Hello", "Arial", 12, bold=True)
-    editor.add_text(" ", "Arial", 12)
-    editor.add_text("World", "Times New Roman", 14, italic=True)
-    editor.add_text("!", "Arial", 12, bold=True, italic=True)
+    # First paragraph - Title
+    doc.new_paragraph(alignment="center", line_spacing=1.5)
+    doc.add_text("My Document Title", "Arial", 16, bold=True, color="blue")
 
-    print("\nDisplaying formatted text:")
-    editor.display()
+    # Second paragraph - Normal text
+    doc.new_paragraph(alignment="left", line_spacing=1.0)
+    doc.add_text("This is the first paragraph with ", "Times New Roman", 12)
+    doc.add_text("some important ", "Times New Roman", 12, bold=True)
+    doc.add_text("and ", "Times New Roman", 12)
+    doc.add_text("emphasized ", "Times New Roman", 12, italic=True)
+    doc.add_text("text.", "Times New Roman", 12)
+
+    # Third paragraph - Quote
+    doc.new_paragraph(alignment="justify", line_spacing=1.2)
+    doc.add_text("Here's a quoted text: ", "Georgia", 12)
+    doc.add_text("Life is like a box of chocolates", "Georgia", 12, italic=True, color="darkgray")
+
+    # Display the document
+    print("\nDisplaying formatted document:")
+    doc.display()
 
     # Show memory savings
-    total_chars = len(editor.characters)
+    total_chars = sum(len(p.content) for p in doc.paragraphs)
     total_formats = FormatFactory.format_count()
-    print(f"\nMemory usage statistics:")
+    format_memory = FormatFactory.memory_usage()
+
+    print(f"\nMemory usage statistics: ")
     print(f"Total characters: {total_chars}")
     print(f"Unique format objects: {total_formats}")
-    print(f"Memory saved: {total_chars - total_formats} format objects")
-
-    # Demonstrate format reuse
-    print("\nDemonstrating format reuse:")
-    format1 = FormatFactory.get_format("Arial", 12, bold=True)
-    format2 = FormatFactory.get_format("Arial", 12, bold=True)
-    print(f"Are format objects the same instance? {format1 is format2}")
+    print(f"Format objects memory usage: ~{format_memory} bytes")
+    print(f"Memory saved: {total_chars - total_formats} format objects "
+          f"(~{(total_chars - total_formats) * format_memory / total_formats} bytes)")
 
 
 if __name__ == "__main__":

@@ -71,11 +71,11 @@ my_function(child1="Emil", child2="Tobias", child3="Linus")
 
 # If the number of keyword arguments is unknown, add a double ** before the parameter name:
 
-def my_function(**kid):
+def my_function(*args, **kid):
     print("His last name is " + kid["lname"])
 
 
-my_function(fname="Tobias", lname="Refsnes")
+my_function(3, "5", [], {}, fname="", lname="Refsnes")
 
 
 # List as an Argument
@@ -99,7 +99,7 @@ def myfunction():
 # best way to find out how it works is by testing and modifying it.
 
 def tri_recursion(k):
-    if (k > 0):
+    if k > 0:
         result = k + tri_recursion(k - 1)
         print(result)
     else:
