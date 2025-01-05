@@ -19,7 +19,7 @@ class SimpleTextPrinter(TextPrinter):
 
 # Decorator abstract class
 class TextDecorator(TextPrinter, ABC):
-    def __init__(self, text_printer):
+    def __init__(self, text_printer: 'TextPrinter'):
         self._text_printer = text_printer
 
     @abstractmethod
@@ -59,7 +59,6 @@ if __name__ == "__main__":
     underline_text_printer = UnderlineTextDecorator(simple_text_printer)
     italic_text_printer = ItalicTextDecorator(simple_text_printer)
 
-
     # Print the decorated text
     print("Simple Text:")
     print(simple_text_printer.print_text())
@@ -69,4 +68,3 @@ if __name__ == "__main__":
     print(red_text_printer.print_text())
     print(underline_text_printer.print_text())
     print(italic_text_printer.print_text())
-
