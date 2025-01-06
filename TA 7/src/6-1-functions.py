@@ -58,7 +58,7 @@ def my_function(*kids):
     print("The youngest child is " + kids[2])
 
 
-my_function("Emil", "Tobias", "Linus")
+my_function("Emil", "Tobias", "Linus", 8)
 
 
 # You can also send arguments with the key = value syntax.
@@ -66,16 +66,20 @@ def my_function(child3, child2, child1):
     print("The youngest child is " + child3)
 
 
-my_function(child1="Emil", child2="Tobias", child3="Linus")
+my_function(
+    child1="Emil",
+    child2="Tobias",
+    child3="Linus",
+)
 
 
 # If the number of keyword arguments is unknown, add a double ** before the parameter name:
 
-def my_function(*args, **kid):
+def my_function(a, *args, **kid):
     print("His last name is " + kid["lname"])
 
 
-my_function(3, "5", [], {}, fname="", lname="Refsnes")
+my_function(3, "5", [], {}, fname="", lname="Refsnes", shlomo=True)
 
 
 # List as an Argument

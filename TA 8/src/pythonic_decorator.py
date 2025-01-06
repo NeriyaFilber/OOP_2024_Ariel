@@ -28,15 +28,19 @@ def log_arguments_and_return(func):
 # Example function with both decorators applied
 @measure_time
 @log_arguments_and_return
-def complex_calculation(x, y):
+def complex_calculation(*args, **kwargs):
     # Simulate a complex calculation
     i = 0
     while i < 5:
         time.sleep(0.6)
         print("Very difficult calculations....")
         i += 1
-    return x * y
+    return args[0] * args[1] * kwargs['factor']
 
 
 # Using the decorated function
-result = complex_calculation(3, 4)
+result = complex_calculation(
+    3,
+    4,
+    factor=0.6
+)
