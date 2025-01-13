@@ -6,11 +6,11 @@ broadcasting, advanced indexing, statistical functions, and image processing.
 """
 
 import numpy as np
-from skimage import io
 import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 from scipy import stats
+from skimage import io
 
 
 # Part 1: Basic Array Creation
@@ -246,6 +246,59 @@ def demonstrate_advanced_functions():
 
     return x, arr
 
+
+def demonstrate_image_blurring(image_path, kernel_size=(5, 5)):
+    """
+    Demonstrates image blurring using a custom kernel size.
+
+    Parameters:
+    image_path (str): Path to the image file
+    kernel_size (tuple): Size of the blurring kernel (height, width)
+    """
+    try:
+        # Read the image
+        image = io.imread(image_path)
+        print(f"\nApplying blur with kernel size {kernel_size}")
+
+        # Create the kernel
+        kernel = np.ones(kernel_size) / (kernel_size[0] * kernel_size[1])
+
+        # Apply convolution for each color channel
+        blurred = np.zeros_like(image)
+
+        for channel in range(image.shape[2]):
+            # Pad the image to handle edges
+            pad_h = kernel_size[0] // 2
+            pad_w = kernel_size[1] // 2
+            padded = np.pad(image[:, :, channel], ((pad_h, pad_h), (pad_w, pad_w)), mode='edge')
+
+            # Apply convolution
+            for i in range(image.shape[0]):
+                for j in range(image.shape[1]):
+                    # Extract the region to apply the kernel
+                    region = padded[i:i + kernel_size[0], j:j + kernel_size[1]]
+                    blurred[i, j, channel] = np.max(region * kernel)
+
+        # Display results
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+        ax1.imshow(image)
+        ax1.set_title('Original Image')
+        ax1.axis('off')
+
+        ax2.imshow(blurred.astype(np.uint8))
+        ax2.set_title(f'Blurred Image (Kernel: {kernel_size[0]}x{kernel_size[1]})')
+        ax2.axis('off')
+
+        plt.tight_layout()
+        plt.show()
+
+        return blurred
+
+    except Exception as e:
+        print(f"Error processing image: {e}")
+        return None
+
 # Part 8: Image Processing (Previous implementation)
 def process_image(image_path):
     """Demonstrates image processing operations using NumPy arrays."""
@@ -262,6 +315,7 @@ def process_image(image_path):
             ("Horizontally Flipped", photo[:,::-1]),
             ("Cropped", photo[100:600,200:600]),
             ("Subsampled", photo[::10,::10]),
+            ("try", photo[:,:,::-1]),
             ("Masked", np.where(photo > 100, 255, 0))
         ]
 
@@ -453,23 +507,27 @@ def main():
     """Main function to run all demonstrations."""
     print("Advanced NumPy Tutorial Demonstrations\n" + "=" * 40)
 
-    # Original demonstrations
-    demonstrate_array_creation()
-    demonstrate_broadcasting()
-    demonstrate_advanced_indexing()
-    demonstrate_statistics()
-    demonstrate_linear_algebra()
-    demonstrate_array_manipulation()
-    demonstrate_advanced_functions()
-    demonstrate_structured_arrays()
-    demonstrate_memory_management()
-    demonstrate_performance()
-    demonstrate_fft()
-    demonstrate_random()
+    # # Original demonstrations
+    # demonstrate_array_creation()
+    # demonstrate_broadcasting()
+    # demonstrate_advanced_indexing()
+    # demonstrate_statistics()
+    # demonstrate_linear_algebra()
+    # demonstrate_array_manipulation()
+    # demonstrate_advanced_functions()
+    # demonstrate_structured_arrays()
+    # demonstrate_memory_management()
+    # demonstrate_performance()
+    # demonstrate_fft()
+    # demonstrate_random()
 
     # Process image if available
     try:
-        process_image('friends.jpg')
+        # process_image('friends.jpg')
+        # Add different kernel sizes for blurring
+        demonstrate_image_blurring('friends.jpg', kernel_size=(3, 3))  # Small blur
+        demonstrate_image_blurring('friends.jpg', kernel_size=(7, 7))  # Medium blur
+        demonstrate_image_blurring('friends.jpg', kernel_size=(15, 15))  # Strong blur
     except Exception as e:
         print(f"Could not process image: {e}")
 

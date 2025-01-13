@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import ttk
 
 
 # Callback functions
@@ -89,7 +88,8 @@ frame5.pack(fill=tk.BOTH, expand=True)
 scale_label = tk.Label(frame5, text="Scale value: 0")
 scale_label.pack()
 
-scale = tk.Scale(frame5, from_=0, to=100, orient=tk.HORIZONTAL, command=on_scale_change)
+scale = tk.Scale(frame5, from_=0, to=100, orient=tk.VERTICAL
+                 , command=on_scale_change)
 scale.pack()
 
 # Listbox
